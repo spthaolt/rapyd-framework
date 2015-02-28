@@ -1,11 +1,12 @@
 <?php
 
 $conf = array(
-    //'debug' => false,
+    'debug' => false,
     'templates.path' => __DIR__ . '/../Views',
     'controller.class_prefix' => '\\App\\Controllers',
     'controller.method_suffix' => 'Action',
     'controller.template_suffix' => 'twig',
+    'url_method' => 'uri',
     'timezone' => 'Europe/Rome',
     'languages' => array(
         array('name' => 'english', 'locale' => 'en_US', 'dateformat' => 'm/d/Y', 'segment' => ''),

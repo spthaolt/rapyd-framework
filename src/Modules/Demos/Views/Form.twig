@@ -1,0 +1,31 @@
+
+{# Form.twig #}
+
+{% extends 'Demo.layout.twig' %}
+
+
+
+{% block title %} Forms {% endblock %}
+
+
+{% block content %}
+
+
+    {{ form_start(testform) }}
+    {{ form_widget(testform) }}
+    {{ form_end(testform) }}
+
+
+{% endblock %}
+
+
+
+
+{% block code %}
+
+       <hr>
+       {{ source_code('/../../Modules/Demos/Controllers/Forms.php') }}
+       {{ source_code('/../../Modules/Demos/Models/Article.php') }}
+       {{ source_code('/../../Modules/Demos/Views/Form.twig') }}
+
+{% endblock %}

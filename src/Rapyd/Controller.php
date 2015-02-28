@@ -4,8 +4,8 @@ namespace Rapyd;
 
 /**
  * todo: re-arrange configuration in App/Conig/config.php ..
- * todo: learn slim uri/qs stuffs  to reimplement rapyd uri helper for widget semantic 
- * 
+ * todo: learn slim uri/qs stuffs  to reimplement rapyd uri helper for widget semantic
+ *
  */
 
 abstract class Controller
@@ -59,9 +59,12 @@ abstract class Controller
     public function __construct(\Rapyd\Application &$app)
     {
         $this->app = $app;
-		
-		$this->db  = $app->db;
-		
+
+        $this->db  = $app->db;
+        $this->form  = $app->form;
+        $this->grid  = $app->grid;
+        $this->set   = $app->set;
+
         if ($renderTemplateSuffix = $app->config('controller.template_suffix')) {
             $this->renderTemplateSuffix = $renderTemplateSuffix;
         }
@@ -79,8 +82,8 @@ abstract class Controller
      */
     protected function render($template, $args = null)
     {
-        
-        //check if controller is in a module, in this case..      
+
+        //check if controller is in a module, in this case..
         if (!is_null($args)) {
             $this->app->view()->appendData($args);
         }
@@ -91,7 +94,7 @@ abstract class Controller
         }
         echo $this->app->view()->render($template);
     }
-    
+
     protected function fetch($template, $args = null)
     {
         if (!is_null($args)) {
@@ -102,6 +105,7 @@ abstract class Controller
         ) {
             $template .= '.'. $this->renderTemplateSuffix;
         }
+
         return $this->app->view()->fetch($template);
     }
 
@@ -191,6 +195,7 @@ abstract class Controller
                 return $this->cleanupParam($params, $args);
             }
         }
+
         return null;
     }
 
@@ -203,9 +208,9 @@ abstract class Controller
                     $value[$k] = $clean;
                 }
             }
+
             return $value;
-        }
-        else {
+        } else {
 
             // cleanup
             if ($this->paramCleanup && !$args['raw']) {
@@ -226,6 +231,7 @@ abstract class Controller
                     return null;
                 }
             }
+
             return $value;
         }
     }
@@ -241,9 +247,9 @@ abstract class Controller
      $params = $this->params(['prefix.name', 'other.name'], ['other.name' => "Default Value"]);
      * </code>
      *
-     * @param mixed $name    Name or names of parameters (GET or POST)
-     * @param mixed $reqMode Optional mode. Either null (all params), true | "post"
-     *                       (only POST params), false | "get" (only GET params)
+     * @param mixed $name     Name or names of parameters (GET or POST)
+     * @param mixed $reqMode  Optional mode. Either null (all params), true | "post"
+     *                        (only POST params), false | "get" (only GET params)
      * @param mixed $defaults Either true (require ALL given or return null), array (defaults)
      *
      * @return mixed Either array or single string or null
@@ -282,6 +288,7 @@ abstract class Controller
                 $res[$n] = $defaults[$n];
             }
         }
+
         return $res;
     }
 
@@ -311,6 +318,7 @@ abstract class Controller
                 $flat[$prefix. $key] = $value;
             }
         }
+
         return $flat;
     }
 

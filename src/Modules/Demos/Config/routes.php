@@ -2,22 +2,15 @@
 
 $demos = '\\Modules\\Demos\\Controllers\\';
 
-
 $app->addRoutes(array(
     '/demo' => $demos . 'Demo:index',
-    '/demo/hello' => $demos .  'Basic:index',
+    '/demo/hello' => $demos .  'Hello:index',
+    '/demo/eloquent' => $demos .  'Eloquent:index',
     '/demo/schema' => $demos . 'Schema:index',
-    '/demo/datagrid'=> $demos .'Datagrid:index',
-    '/demo/dataset'=> $demos . 'Dataset:index',
+    '/demo/datagrid:widget'=> $demos .'Datagrid:index',
+    '/demo/dataset:widget'=> $demos . 'Dataset:index',
+
+    '/demo/forms'   => $demos . 'Forms:index',
 
     '/test/twig'   => $demos . 'Tests:twig',
-        ), function() use ($app) {
-            $app->view()->setTemplatesDirectory(realpath(__DIR__ . '/../Views'));
-});
-
-/*
- //da utilizzare per le route dei moduli?
- $app->hook('slim.before.dispatch', function () use ($app) {
-    $app->view()->setTemplatesDirectory(realpath(__DIR__ . '/../Views'));
-});
- */
+));

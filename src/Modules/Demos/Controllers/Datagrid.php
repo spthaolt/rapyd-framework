@@ -2,27 +2,24 @@
 
 namespace Modules\Demos\Controllers;
 
+use Modules\Demos\Models\Article;
+
 class Datagrid extends \Rapyd\Controller
 {
 
     public function indexAction()
     {
 
-        //dataset widget 
-        $dg = new \Rapyd\Widgets\DataGrid();
-        $dg->source("demo_articles");
-        $dg->per_page = 10;
-        $dg->num_links= 2;
-        $dg->setColumn('article_id',"ID");
-        $dg->setColumn('<em>{{ title|lower }}</em>',"title", true);
-        $dg->build();   
+        //dataset widget
+        $dg = $this->grid->createBuilder();
+        $dg->setSource(Article::with("author"));
+        $dg->setPagination(10);
+        $dg->add('article_id',"ID", true);
+        $dg->add('title',"title");
+        $dg->add('<em>{{ article.author.firstname|lower }}</em>',"author");
+        $dg->getGrid();
 
-        $data['title'] = 'DataSet Widget';
-        $data['active'] = 'grid';
-        $data['content_raw'] = $this->fetch('Grid', array('dg' => $dg));
-        $data['code']  = highlight_string(file_get_contents(__FILE__), TRUE);
-        $data['code'] .= htmlentities(file_get_contents(__DIR__.'/../Views/Grid.twig'));
-        $this->render('Demo', $data);
+        $this->render('Grid', array('dg' => $dg));
     }
 
 }

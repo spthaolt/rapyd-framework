@@ -38,8 +38,10 @@ class Pagination
     {
         if (self::$identifier < 1) {
             self::$identifier++;
+
             return "";
         }
+
         return (string) self::$identifier++;
     }
 
@@ -54,12 +56,10 @@ class Pagination
         if (!isset($this->app))
             $this->app = \Rapyd\Application::getInstance();
 
-
         //unset current pagination
         $this->url = $this->app->url->remove('reset' . $this->cid)
                         ->append('pag' . $this->cid, "-pag-")
                         ->get() . $this->hash;
-
 
         // Core pagination values
         $this->total_items = (int) max(0, $this->total_items);
@@ -73,11 +73,11 @@ class Pagination
 
         // If there is no first/last/previous/next page, relative to the
         // current page, value is set to FALSE. Valid page number otherwise.
-        $this->first_page = ($this->current_page == 1) ? FALSE : 1;
+        $this->first_page = ($this->current_page == 1) ? false : 1;
 
-        $this->last_page = ($this->current_page >= $this->total_pages) ? FALSE : $this->total_pages;
-        $this->previous_page = ($this->current_page > 1) ? $this->current_page - 1 : FALSE;
-        $this->next_page = ($this->current_page < $this->total_pages) ? $this->current_page + 1 : FALSE;
+        $this->last_page = ($this->current_page >= $this->total_pages) ? false : $this->total_pages;
+        $this->previous_page = ($this->current_page > 1) ? $this->current_page - 1 : false;
+        $this->next_page = ($this->current_page < $this->total_pages) ? $this->current_page + 1 : false;
 
         if ($this->num_links) {
             $this->nav_start = (($this->current_page - $this->num_links) > 0) ? $this->current_page - ($this->num_links - 1) : 1;
@@ -88,25 +88,16 @@ class Pagination
         }
     }
 
-    public function links($view = "")
+    public function links()
     {
         if ($this->total_pages < 2)
             return '';
 
+        $view = 'Pagination.twig';
+        $this->app->view()->appendData(get_object_vars($this));
+        $output = $this->app->view()->render($view);
 
-        //switch to Rapyd/Views path 
-        if ($view == "") {
-            $view = 'Pagination.twig';
-            $current_template = $this->app->view()->getTemplatesDirectory(); //$this->app->config('templates.path');
-            $this->app->config('templates.path', __DIR__ . '/../Views');
-            $this->app->setupView();
-            $this->app->view()->appendData(get_object_vars($this));
-            $output = $this->app->view()->render($view);
-            $this->app->config('templates.path', $current_template);
-            $this->app->setupView();
-            return $output;
-        }
-        return $this->app->view()->render($view);
+        return $output;
     }
 
     public function __toString()

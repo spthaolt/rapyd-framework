@@ -2,24 +2,20 @@
 
 namespace Modules\Demos\Controllers;
 
+use Modules\Demos\Models\Article;
+
 class Dataset extends \Rapyd\Controller
 {
 
     public function indexAction()
     {
-        //dataset widget 
-        $ds = new \Rapyd\Widgets\DataSet();
-        $ds->source("demo_articles");
-        $ds->per_page = 10;
-        $ds->num_links= 2;
-        $ds->build();   
 
-        $data['title'] = 'DataSet Widget';
-        $data['active'] = 'set';
-        $data['content_raw'] = $this->fetch('Set', array('ds' => $ds));
-        $data['code']  = highlight_string(file_get_contents(__FILE__), TRUE);
-        $data['code'] .= htmlentities(file_get_contents(__DIR__.'/../Views/Set.twig'));
-        $this->render('Demo', $data);
+        $ds = $this->set->createBuilder();
+        $ds->setSource(Article::with("comments", "author"));
+        $ds->setPagination(5);
+        $ds->getSet();
+
+        $this->render('Set', array('ds' => $ds));
     }
 
 }
